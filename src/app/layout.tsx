@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/wrappers/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "sonner";
+import Navbar from "@/components/custom/navbar";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const font = Space_Grotesk({
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -26,9 +23,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${font.className} antialiased`}
       >
-        {children}
+        <TooltipProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Toaster />
+            <div className="flex flex-col min-h-screen">
+              <Navbar />
+              {children}
+            </div>
+          </ThemeProvider>
+        </TooltipProvider>
       </body>
     </html>
   );
